@@ -172,14 +172,51 @@ void FiberSim_model::set_FiberSim_model_parameters_from_JSON_file_string(char JS
     else
         sc_k_stiff = GSL_NAN;
 
-    JSON_functions::check_JSON_member_number(mus, "sc_k_stiff_toe");
-    sc_k_stiff_toe = mus["sc_k_stiff_toe"].GetDouble();
+    if (JSON_functions::check_JSON_member_exists(mus, "sc_k_stiff_toe"))
+    {
+        // Is it a number
+        if (JSON_functions::valid_JSON_member_number(mus, "sc_k_stiff_toe"))
+        {
+            sc_k_stiff_toe = mus["sc_k_stiff_toe"].GetDouble();
+        }
+        else
+        {
+            sc_k_stiff_toe = GSL_NAN;
+        }
+    }
+    else
+        sc_k_stiff_toe = GSL_NAN;
 
-    JSON_functions::check_JSON_member_number(mus, "sc_k_stiff_linear");
-    sc_k_stiff_linear = mus["sc_k_stiff_linear"].GetDouble();
+    if (JSON_functions::check_JSON_member_exists(mus, "sc_k_stiff_linear"))
+    {
+        // Is it a number
+        if (JSON_functions::valid_JSON_member_number(mus, "sc_k_stiff_linear"))
+        {
+            sc_k_stiff_linear = mus["sc_k_stiff_linear"].GetDouble();
+        }
+        else
+        {
+            sc_k_stiff_linear = GSL_NAN;
+        }
+    }
+    else
+        sc_k_stiff_linear = GSL_NAN;
 
-    JSON_functions::check_JSON_member_number(mus, "force_transition");
-    force_transition = mus["force_transition"].GetDouble();
+    if (JSON_functions::check_JSON_member_exists(mus, "force_transition"))
+    {
+        // Is it a number
+        if (JSON_functions::valid_JSON_member_number(mus, "force_transition"))
+        {
+            force_transition = mus["force_transition"].GetDouble();
+        }
+        else
+        {
+            force_transition = GSL_NAN;
+        }
+    }
+    else
+        force_transition = GSL_NAN;
+
 
     // Check if temperature is specified - This part of the code ensures compatibility with FiberSim V2.0.2
 

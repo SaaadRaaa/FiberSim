@@ -63,16 +63,22 @@ double series_component::return_series_extension(double muscle_force)
 		exit(1);
 	}
 
-	if (muscle_force < force_transition)
+	if (!(gsl_isnan(sc_k_stiff_toe)))
 	{
-		ext = muscle_force / sc_k_stiff_toe;
+		if (muscle_force < force_transition)
+		{
+			ext = muscle_force / sc_k_stiff_toe;
+		}
+		else
+		{
+			ext = (force_transition / sc_k_stiff_toe) +
+				((muscle_force - force_transition) / sc_k_stiff_linear);
+		}
 	}
 	else
 	{
-		ext = (force_transition / sc_k_stiff_toe) +
-			((muscle_force - force_transition) / sc_k_stiff_linear);
+		ext = muscle_force / sc_k_stiff;
 	}
-
 
 	return ext;
 }
@@ -85,16 +91,22 @@ double series_component::return_series_force(double series_extension)
 	double series_force;
 
 	// Code
-	if (series_extension < (force_transition / sc_k_stiff_toe))
+	if (!(gsl_isnan(sc_k_stiff_toe)))
 	{
-		series_force = series_extension * sc_k_stiff_toe;
+		if (series_extension < (force_transition / sc_k_stiff_toe))
+		{
+			series_force = series_extension * sc_k_stiff_toe;
+		}
+		else
+		{
+			series_force = force_transition +
+				((series_extension - (force_transition / sc_k_stiff_toe)) * sc_k_stiff_linear);
+		}
 	}
 	else
 	{
-		series_force = force_transition +
-			((series_extension - (force_transition / sc_k_stiff_toe)) * sc_k_stiff_linear);
+		series_force = series_extension * sc_k_stiff;
 	}
-
 
 	return series_force;
 }

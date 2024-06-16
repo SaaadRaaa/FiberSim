@@ -14,11 +14,12 @@
 
 #include "gsl_math.h"
 
+
 // Constructor
 series_component::series_component(
-	FiberSim_model *set_p_fs_model,
-	FiberSim_options *set_p_fs_options,
-	muscle *set_p_parent_m)
+	FiberSim_model* set_p_fs_model,
+	FiberSim_options* set_p_fs_options,
+	muscle* set_p_parent_m)
 {
 	// Initialise
 
@@ -29,7 +30,6 @@ series_component::series_component(
 
 	// Set the stiffness
 	sc_k_stiff = p_fs_model->sc_k_stiff;
-
 	sc_k_stiff_toe = p_fs_model->sc_k_stiff_toe;
 	sc_k_stiff_linear = p_fs_model->sc_k_stiff_linear;
 	force_transition = p_fs_model->force_transition;
@@ -52,7 +52,7 @@ series_component::~series_component()
 double series_component::return_series_extension(double muscle_force)
 {
 	//! Returns the extension of the series component for a given force
-
+	
 	// Variables
 	double ext;
 
@@ -63,8 +63,6 @@ double series_component::return_series_extension(double muscle_force)
 		exit(1);
 	}
 
-	ext = muscle_force / sc_k_stiff;
-
 	if (muscle_force < force_transition)
 	{
 		ext = muscle_force / sc_k_stiff_toe;
@@ -72,8 +70,9 @@ double series_component::return_series_extension(double muscle_force)
 	else
 	{
 		ext = (force_transition / sc_k_stiff_toe) +
-			  ((muscle_force - force_transition) / sc_k_stiff_linear);
+			((muscle_force - force_transition) / sc_k_stiff_linear);
 	}
+
 
 	return ext;
 }
@@ -86,8 +85,6 @@ double series_component::return_series_force(double series_extension)
 	double series_force;
 
 	// Code
-	series_force = series_extension * sc_k_stiff;
-
 	if (series_extension < (force_transition / sc_k_stiff_toe))
 	{
 		series_force = series_extension * sc_k_stiff_toe;
@@ -95,8 +92,10 @@ double series_component::return_series_force(double series_extension)
 	else
 	{
 		series_force = force_transition +
-					   ((series_extension - (force_transition / sc_k_stiff_toe)) * sc_k_stiff_linear);
+			((series_extension - (force_transition / sc_k_stiff_toe)) * sc_k_stiff_linear);
 	}
+
 
 	return series_force;
 }
+
